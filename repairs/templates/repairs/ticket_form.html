@@ -1,0 +1,52 @@
+{% extends "repairs/base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h2 class="mb-4">{{ title }}</h2>
+<form method="post">
+  {% csrf_token %}
+
+  <div class="card mb-4">
+    <div class="card-header">Ticket Info</div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label">Instrument</label>
+        {{ form.instrument }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Status</label>
+        {{ form.status }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Notes</label>
+        {{ form.notes }}
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">Jobs</div>
+    <div class="card-body">
+      {{ formset.management_form }}
+      <table class="table" id="job-table">
+        <thead>
+          <tr><th>Job Type</th><th>Price</th><th>Notes</th><th>Delete</th></tr>
+        </thead>
+        <tbody>
+          {% for job_form in formset %}
+          <tr>
+            <td>{{ job_form.job_type }}</td>
+            <td>{{ job_form.price }}</td>
+            <td>{{ job_form.notes }}</td>
+            <td>{{ job_form.DELETE }}{% if job_form.instance.pk %}del{% endif %}</td>
+            {{ job_form.id }}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Save</button>
+  <a href="{% url 'dashboard' %}" class="btn btn-secondary ms-2">Cancel</a>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "repairs/base.html" %}
+{% block title %}Owners{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Owners</h2>
+  <div>
+    <a href="{% url 'owner_create' %}" class="btn btn-primary me-2">+ New Owner</a>
+    <a href="{% url 'instrument_create' %}" class="btn btn-outline-secondary">+ New Instrument</a>
+  </div>
+</div>
+
+{% for owner in owners %}
+<div class="card mb-3">
+  <div class="card-header">
+    <strong>{{ owner.name }}</strong>
+    {% if owner.phone %} &mdash; {{ owner.phone }}{% endif %}
+    {% if owner.email %} &mdash; {{ owner.email }}{% endif %}
+  </div>
+  <div class="card-body p-2">
+    {% for instrument in owner.instruments.all %}
+    <span class="badge bg-light text-dark border me-1">{{ instrument }}</span>
+    {% empty %}
+    <span class="text-muted">No instruments</span>
+    {% endfor %}
+  </div>
+</div>
+{% empty %}
+<p class="text-muted">No owners yet.</p>
+{% endfor %}
+{% endblock %}
