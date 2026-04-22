@@ -6,7 +6,50 @@
   <a href="{% url 'ticket_create' %}" class="btn btn-primary">+ New Ticket</a>
 </div>
 
-<table class="table table-hover">
+<div class="btn-group dropdown mb-2">
+  <button class="btn btn-secondary dropdown-toggle" id="status" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Owner
+  </button>
+  <form class="dropdown-menu p-4">
+    <div class="mb-3">
+      <label for="name" class="form-label">Owner:</label>
+      <input type="text" class="form-control" oninput="filterTable('owner', this.value)" id="name" placeholder="Cheryll">
+    </div>
+    <button type="button" class="btn btn-dark">Filter</button>
+  </form>
+</div>
+
+<div class="btn-group dropdown mb-2">
+  <button class="btn btn-secondary dropdown-toggle" id="status" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Status
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" onclick="filterTable('status', 'all')">All</a></li>
+    <li><a class="dropdown-item" onclick="filterTable('status', 'Open')">Open</a></li>
+    <li><a class="dropdown-item" onclick="filterTable('status', 'In Progress')">In Progress</a></li>
+    <li><a class="dropdown-item" onclick="filterTable('status', 'Complete')">Complete</a></li>
+    <li><a class="dropdown-item" onclick="filterTable('status', 'Picked Up')">Picked Up</a></li>
+  </ul>
+</div>
+
+<div class="btn-group dropdown mb-2">
+  <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+    Date
+  </button>
+  <form class="dropdown-menu p-4">
+    <div class="mb-3">
+      <label for="dateSelectLower" class="form-label">Created After:</label>
+      <input type="date" class="form-control" id="dateSelectLower" placeholder="May 1, 2000">
+    </div>
+    <div class="mb-3">
+      <label for="dateSelectUpper" class="form-label">Created Before:</label>
+      <input type="date" class="form-control" id="dateSelectUpper" placeholder="May 1, 2020">
+    </div>
+    <button type="button" class="btn btn-dark" onclick="filterTable('date', 'x')">Filter</button>
+  </form>
+</div>
+
+<table class="table table-hover" id="ticketList">
   <thead class="table-dark">
     <tr>
       <th>#</th>
@@ -40,4 +83,38 @@
     {% endfor %}
   </tbody>
 </table>
+
+<script>
+
+let activeName = null;
+let activeStatus = 'all';
+let activeDateEarly = null;
+let activeDateLate = null;
+
+function filterTable(type, value) {
+  if (type === 'owner') activeName = value.toUpperCase();
+  if (type === 'status') activeStatus = value;
+  if (type === 'date') {
+    activeDateEarly = new Date(document.getElementById('dateSelectLower').value);
+    activeDateLate = new Date(document.getElementById('dateSelectUpper').value);
+  }
+
+
+  const rows = document.querySelectorAll('#ticketList tbody tr');
+  rows.forEach(row => {
+    const cellName = row.getElementsByTagName('td')[2].textContent.trim().toUpperCase();
+    const statusCell = row.getElementsByTagName('td')[3];
+    const cellDate = new Date(row.getElementsByTagName('td')[4].textContent.trim());
+
+    const nameMatch = !activeName || cellName.includes(activeName);
+
+    const statusMatch = activeStatus === 'all' || statusCell.textContent.trim() === activeStatus;
+
+    const dateMatch = (!activeDateEarly || cellDate >= activeDateEarly) &&
+                      (!activeDateLate  || cellDate <= activeDateLate );
+
+    row.style.display = (nameMatch && statusMatch && dateMatch) ? '' : 'none';
+  });
+}
+</script>
 {% endblock %}
