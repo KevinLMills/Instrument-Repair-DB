@@ -17,7 +17,7 @@ def ticket_detail(request, pk):
 def ticket_create(request):
     if request.method == 'POST':
         form = TicketForm(request.POST)
-        formset = JobFormSet(request.POST)
+        formset = JobFormSet(request.POST, queryset=Job.objects.none())
         if form.is_valid() and formset.is_valid():
             ticket = form.save()
             jobs = formset.save(commit=False)
@@ -27,7 +27,7 @@ def ticket_create(request):
             return redirect('ticket_detail', pk=ticket.pk)
     else:
         form = TicketForm()
-        formset = JobFormSet()
+        formset = JobFormSet(queryset=Job.objects.none())
     return render(request, 'repairs/ticket_form.html', {'form': form, 'formset': formset, 'title': 'New Ticket'})
 
 
