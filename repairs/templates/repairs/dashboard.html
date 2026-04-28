@@ -86,7 +86,7 @@
 
 <script>
 
-let activeName = null;
+let activeName = '';
 let activeStatus = 'all';
 let activeDateEarly = null;
 let activeDateLate = null;
@@ -106,7 +106,7 @@ function filterTable(type, value) {
     const statusCell = row.getElementsByTagName('td')[3];
     const cellDate = new Date(row.getElementsByTagName('td')[4].textContent.trim());
 
-    const nameMatch = !activeName || cellName.includes(activeName);
+    const nameMatch = activeName == '' || cellName.includes(activeName);
 
     const statusMatch = activeStatus === 'all' || statusCell.textContent.trim() === activeStatus;
 
