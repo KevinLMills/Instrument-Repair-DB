@@ -5,7 +5,14 @@ from .forms import TicketForm, JobFormSet, InstrumentForm, OwnerForm
 
 def dashboard(request):
     tickets = Ticket.objects.select_related('instrument__owner').order_by('-created_at')
-    return render(request, 'repairs/dashboard.html', {'tickets': tickets})
+    context = {
+        'tickets': tickets,
+        'open_count': tickets.filter(status='open').count(),
+        'in_progress_count': tickets.filter(status='in_progress').count(),
+        'complete_count': tickets.filter(status='complete').count(),
+        'picked_up_count': tickets.filter(status='picked_up').count(),
+    }
+    return render(request, 'repairs/dashboard.html', context)
 
 
 def ticket_detail(request, pk):

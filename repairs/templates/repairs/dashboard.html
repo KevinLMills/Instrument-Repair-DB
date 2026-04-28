@@ -1,6 +1,40 @@
 {% extends "repairs/base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
+<div class="row g-3 mb-4">
+  <div class="col">
+    <div class="card bg-body-secondary border-0 p-3">
+      <div class="text-muted medium text-uppercase" style="letter-spacing:.05em">Total</div>
+      <div class="card border-0 p-1">
+        <div class="fs-4 fw-medium">{{ tickets|length }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card bg-body-secondary border-0 p-3">
+      <div class="text-muted medium text-uppercase" style="letter-spacing:.05em">Open</div>
+      <div class="card border-0 p-1 bg-secondary">
+        <div class="fs-4 fw-medium text-light">{{ open_count }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card bg-body-secondary border-0 p-3">
+      <div class="text-muted medium text-uppercase" style="letter-spacing:.05em">In Progress</div>
+      <div class="card border-0 p-1 bg-warning">
+        <div class="fs-4 fw-medium">{{ in_progress_count }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card bg-body-secondary border-0 p-3">
+      <div class="text-muted medium text-uppercase" style="letter-spacing:.05em">Complete</div>
+      <div class="card border-0 p-1 bg-success">
+        <div class="fs-4 fw-medium text-light">{{ complete_count }}</div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>All Tickets</h2>
   <a href="{% url 'ticket_create' %}" class="btn btn-primary">+ New Ticket</a>
